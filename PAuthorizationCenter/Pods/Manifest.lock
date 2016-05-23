@@ -1,0 +1,10 @@
+PODS:
+  - HTestVC (1.2.0)
+
+DEPENDENCIES:
+  - HTestVC
+
+SPEC CHECKSUMS:
+  HTestVC: 5fb9bded467adaf0c58d40fa2eee366881949fc9
+
+COCOAPODS: 0.38.2
