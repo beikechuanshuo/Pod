@@ -1,0 +1,6 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'ssh://git@mobiledev.camera360.com:7999/pglib/pglibspecs.git'
+
+pod 'Reachability'
+pod 'SFHFKeychainUtils'
+pod 'ReactiveCocoa', '2.4.4'

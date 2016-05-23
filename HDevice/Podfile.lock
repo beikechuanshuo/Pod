@@ -1,0 +1,22 @@
+PODS:
+  - Reachability (3.2)
+  - ReactiveCocoa (2.4.4):
+    - ReactiveCocoa/UI (= 2.4.4)
+  - ReactiveCocoa/Core (2.4.4):
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/no-arc (2.4.4)
+  - ReactiveCocoa/UI (2.4.4):
+    - ReactiveCocoa/Core
+  - SFHFKeychainUtils (0.0.1)
+
+DEPENDENCIES:
+  - Reachability
+  - ReactiveCocoa (= 2.4.4)
+  - SFHFKeychainUtils
+
+SPEC CHECKSUMS:
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  ReactiveCocoa: cbe3b5eae464aa72a348a7323996b171728a9e71
+  SFHFKeychainUtils: 9576b411a79a058f4d5381ace6f3242b9a62e664
+
+COCOAPODS: 0.38.2
