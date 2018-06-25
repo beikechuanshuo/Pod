@@ -2,11 +2,17 @@
 //  HDevice.h
 //  Test
 //
-//  Created by C360_liyanjun on 15/12/14.
-//  Copyright © 2015年 C360_liyanjun. All rights reserved.
+//  Created by liyanjun on 15/12/14.
+//  Copyright © 2015年 liyanjun. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+static NSString *const kUserNameForKeyChain = @"kUserNameForKeyChain_Reliao";
+static NSString *const kIDFVKeyForKeyChain = @"kIDFVKeyForKeyChain_Reliao";
+static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain_Reliao";
+static NSString *const kUUIDKeyForKeyChain = @"kUUIDKeyForKeyChain_Reliao";
+
 
 /** 设备类型 **/
 typedef NS_ENUM(NSInteger, HDeviceModel)
@@ -18,6 +24,17 @@ typedef NS_ENUM(NSInteger, HDeviceModel)
     HDeviceModel_iWatch,
     HDeviceModel_other,
 };
+
+/**
+ 设备支持的安全验证类型
+ **/
+typedef NS_ENUM(NSInteger, HDeviceSafeType)
+{
+    HDeviceSafeType_Gesture,
+    HDeviceSafeType_TouchID,
+    HDeviceSafeType_FaceID
+};
+
 
 /** 设备本地化类型 **/
 typedef NS_ENUM(NSInteger, HDeviceLocalizedModel)
@@ -39,7 +56,11 @@ typedef NS_ENUM(NSInteger, HDeviceLocalizedModel)
     HDeviceLocalizedModel_iPhone6S,
     HDeviceLocalizedModel_iPhone6SP,
     HDeviceLocalizedModel_iPhoneSE,
-    
+    HDeviceLocalizedModel_iPhone7,
+    HDeviceLocalizedModel_iPhone7P,
+    HDeviceLocalizedModel_iPhone8,
+    HDeviceLocalizedModel_iPhone8P,
+    HDeviceLocalizedModel_iPhoneX,
     //iPad
     HDeviceLocalizedModel_iPad1,
     HDeviceLocalizedModel_iPad2,
@@ -47,11 +68,20 @@ typedef NS_ENUM(NSInteger, HDeviceLocalizedModel)
     HDeviceLocalizedModel_iPad4,
     HDeviceLocalizedModel_iPadAir,
     HDeviceLocalizedModel_iPadAir2,
+    HDeviceLocalizedModel_iPad5,
     
     //iPadMini
     HDeviceLocalizedModel_iPadMini1,
     HDeviceLocalizedModel_iPadMini2,
     HDeviceLocalizedModel_iPadMini3,
+    HDeviceLocalizedModel_iPadMini4,
+    
+    //iPadPro
+    HDeviceLocalizedModel_iPadPro_10,
+    HDeviceLocalizedModel_iPadPro_13,
+    HDeviceLocalizedModel_iPadPro2_13,
+    HDeviceLocalizedModel_iPadPro2_10,
+    
     
     //iPodTouch
     HDeviceLocalizedModel_iPodTouch1,
@@ -72,10 +102,10 @@ typedef NS_ENUM(NSInteger, HDeviceLocalizedModel)
 //设备等级
 typedef NS_ENUM(NSInteger, HDeviceLevel)
 {
-    HDeviceLevel_VeryLow,  //iPhone4及以下设备
-    HDeviceLevel_Low,      //iPhone4s
-    HDeviceLevel_Medium,   //iPhone5 iPhone5c
-    HDeviceLevel_High,     //iPhone5s以上
+    HDeviceLevel_VeryLow,  //iPhone5 5C及以下设备
+    HDeviceLevel_Low,      //iPhone6 6P一下
+    HDeviceLevel_Medium,   //iPhone6s iPhone6SP以上
+    HDeviceLevel_High,     //iPhone8 8P X以上
 };
 
 /**
@@ -158,12 +188,17 @@ typedef NS_ENUM(NSUInteger, HDeviceMC)
 /*
  * 是否支持系统指纹识别TouchID
  */
-@property (nonatomic, readonly) BOOL supportedTouchID;
+@property (nonatomic, readonly) HDeviceSafeType supportedSafeType;
 
 /**
  * 是否支持3DTouch
  */
 @property (nonatomic, readonly) BOOL supported3DTouch;
+
+/**
+ *  UUID用来充当唯一标示
+ */
+- (NSString *)UUIDString;
 
 /**
  *  系统提供的替代udid的唯一识别字符串，但是在用户把应用开发商所有的应用都删除之后，再重新下载，会生成一个新的值
@@ -195,6 +230,14 @@ typedef NS_ENUM(NSUInteger, HDeviceMC)
  * Mac地址
  */
 @property (nonatomic, readonly) NSString *macAddress;
+
+
+@property (nonatomic,assign) CGFloat toolBarHeight;
+
+@property (nonatomic,assign) CGFloat navViewHeight;
+
+//webview是否有图片长按弹出actionsheet，根据此值来屏蔽webview的图片点击事件
+@property (nonatomic,assign) BOOL isWebViewImageActionSheetAppear;
 
 /**
  * 获取实例对象

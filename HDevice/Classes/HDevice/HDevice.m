@@ -2,8 +2,8 @@
 //  HDevice.m
 //  Test
 //
-//  Created by C360_liyanjun on 15/12/14.
-//  Copyright © 2015年 C360_liyanjun. All rights reserved.
+//  Created by liyanjun on 15/12/14.
+//  Copyright © 2015年 liyanjun. All rights reserved.
 //
 
 #import "HDevice.h"
@@ -14,11 +14,8 @@
 #import <objc/runtime.h>
 #import <AdSupport/ASIdentifierManager.h>
 #if __has_include(<SFHFKeychainUtils.h>)
-#import <SFHFKeychainUtils/SFHFKeychainUtils.h>
+#import "SFHFKeychainUtils.h"
 
-static NSString *const kUserNameForKeyChain = @"kUserNameForKeyChain";
-static NSString *const kIDFVKeyForKeyChain = @"kIDFVKeyForKeyChain";
-static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
 
 #endif
 
@@ -109,6 +106,11 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             case HDeviceLocalizedModel_iPhone6S:
             case HDeviceLocalizedModel_iPhone6SP:
             case HDeviceLocalizedModel_iPhoneSE:
+            case HDeviceLocalizedModel_iPhone7:
+            case HDeviceLocalizedModel_iPhone7P:
+            case HDeviceLocalizedModel_iPhone8:
+            case HDeviceLocalizedModel_iPhone8P:
+            case HDeviceLocalizedModel_iPhoneX:
             {
                 temModel = HDeviceModel_iPhone;
                 return ;
@@ -120,6 +122,10 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             case HDeviceLocalizedModel_iPad4:
             case HDeviceLocalizedModel_iPadAir:
             case HDeviceLocalizedModel_iPadAir2:
+            case HDeviceLocalizedModel_iPadPro_10:
+            case HDeviceLocalizedModel_iPadPro_13:
+            case HDeviceLocalizedModel_iPadPro2_13:
+            case HDeviceLocalizedModel_iPadPro2_10:
             {
                 temModel = HDeviceModel_iPad;
                 return ;
@@ -128,6 +134,7 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             case HDeviceLocalizedModel_iPadMini1:
             case HDeviceLocalizedModel_iPadMini2:
             case HDeviceLocalizedModel_iPadMini3:
+            case HDeviceLocalizedModel_iPadMini4:
             {
                 temModel = HDeviceModel_iPadMini;
                 return ;
@@ -183,6 +190,17 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
         }
 
         locModel = (HDeviceLocalizedModel)[device integerValue];
+        if (locModel == HDeviceLocalizedModel_iPhoneX)
+        {
+            self.toolBarHeight = 83;
+            self.navViewHeight = 88;
+        }
+        else
+        {
+            self.toolBarHeight = 49;
+            self.navViewHeight = 64;
+        }
+
     });
     return locModel;
 }
@@ -232,57 +250,48 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
     return 0;
 }
 
-- (BOOL)supportedTouchID
+- (HDeviceSafeType)supportedSafeType
 {
-    static BOOL support = NO;
-    static dispatch_once_t onceToken;
-    __weak __typeof(self) weakSelf = self;
-    dispatch_once(&onceToken, ^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        HDeviceLocalizedModel type = strongSelf.localizedModel;
-        switch (type) {
-            case HDeviceLocalizedModel_iPhone1:
-            case HDeviceLocalizedModel_iPhone3G:
-            case HDeviceLocalizedModel_iPhone3GS:
-            case HDeviceLocalizedModel_iPhone4:
-            case HDeviceLocalizedModel_iPhone4S:
-            case HDeviceLocalizedModel_iPhone5:
-            case HDeviceLocalizedModel_iPhone5C:
-
-            case HDeviceLocalizedModel_iPad1:
-            case HDeviceLocalizedModel_iPad2:
-            case HDeviceLocalizedModel_iPad3:
-            case HDeviceLocalizedModel_iPad4:
-            case HDeviceLocalizedModel_iPadAir:
-
-            case HDeviceLocalizedModel_iPadMini1:
-            case HDeviceLocalizedModel_iPadMini2:
-
-            case HDeviceLocalizedModel_iPodTouch1:
-            case HDeviceLocalizedModel_iPodTouch2:
-            case HDeviceLocalizedModel_iPodTouch3:
-            case HDeviceLocalizedModel_iPodTouch4:
-            case HDeviceLocalizedModel_iPodTouch5:
-            case HDeviceLocalizedModel_iPodTouch6:
-
-            case HDeviceLocalizedModel_iWatch:
-
-            case HDeviceLocalizedModel_AppleTV2:
-            case HDeviceLocalizedModel_AppleTV3:
-
-            case HDeviceLocalizedModel_Unknown:
-            case HDeviceLocalizedModel_Simulator:
-                return;
-
-            default:
-                support = YES;
-                return ;
-        }
-    });
-
-    return support;
+    HDeviceLocalizedModel type = self.localizedModel;
+    switch (type) {
+        case HDeviceLocalizedModel_iPhone1:
+        case HDeviceLocalizedModel_iPhone3G:
+        case HDeviceLocalizedModel_iPhone3GS:
+        case HDeviceLocalizedModel_iPhone4:
+        case HDeviceLocalizedModel_iPhone4S:
+        case HDeviceLocalizedModel_iPhone5:
+        case HDeviceLocalizedModel_iPhone5C:
+            
+        case HDeviceLocalizedModel_iPad1:
+        case HDeviceLocalizedModel_iPad2:
+        case HDeviceLocalizedModel_iPad3:
+        case HDeviceLocalizedModel_iPad4:
+        case HDeviceLocalizedModel_iPadAir:
+            
+        case HDeviceLocalizedModel_iPadMini1:
+        case HDeviceLocalizedModel_iPadMini2:
+            
+        case HDeviceLocalizedModel_iPodTouch1:
+        case HDeviceLocalizedModel_iPodTouch2:
+        case HDeviceLocalizedModel_iPodTouch3:
+        case HDeviceLocalizedModel_iPodTouch4:
+        case HDeviceLocalizedModel_iPodTouch5:
+        case HDeviceLocalizedModel_iPodTouch6:
+            
+        case HDeviceLocalizedModel_iWatch:
+            
+        case HDeviceLocalizedModel_AppleTV2:
+        case HDeviceLocalizedModel_AppleTV3:
+            
+        case HDeviceLocalizedModel_Unknown:
+        case HDeviceLocalizedModel_Simulator:
+            return HDeviceSafeType_Gesture;
+        case HDeviceLocalizedModel_iPhoneX:
+            return HDeviceSafeType_FaceID;
+        default:
+            return HDeviceSafeType_TouchID;
+    }
 }
-
 - (BOOL)supported3DTouch
 {
     static BOOL support = NO;
@@ -294,6 +303,11 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
         switch (type) {
             case HDeviceLocalizedModel_iPhone6S:
             case HDeviceLocalizedModel_iPhone6SP:
+            case HDeviceLocalizedModel_iPhone7:
+            case HDeviceLocalizedModel_iPhone7P:
+            case HDeviceLocalizedModel_iPhone8:
+            case HDeviceLocalizedModel_iPhone8P:
+            case HDeviceLocalizedModel_iPhoneX:
                 support = YES;
                 return;
             default:
@@ -302,6 +316,57 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
     });
     return support;
 }
+
+
+- (NSString *)UUIDString
+{
+#if __has_include(<SFHFKeychainUtils.h>)
+    static NSString *savedUUID;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSError *error = nil;
+        NSString *savedUuidString = [SFHFKeychainUtils getPasswordForUsername:kUserNameForKeyChain
+                                                      andServiceName:kUUIDKeyForKeyChain
+                                                               error:&error];
+        
+        if ((error == nil) &&
+            (savedUuidString != nil) &&
+            ([savedUuidString length] > 0))
+        {
+            //keychain中有对应的idfv值，直接返回
+            savedUUID = savedUuidString;
+            return;
+        }
+        
+        CFUUIDRef puuid = CFUUIDCreate(nil);
+        CFStringRef uuidString = CFUUIDCreateString(nil, puuid );
+        NSString * result = (NSString *)CFBridgingRelease(CFStringCreateCopy(NULL, uuidString));
+        CFRelease(puuid);
+        CFRelease(uuidString);
+        
+        //第一次读取出来时，保存到keychain中
+        [SFHFKeychainUtils storeUsername:kUserNameForKeyChain
+                             andPassword:result
+                          forServiceName:kUUIDKeyForKeyChain
+                          updateExisting:YES
+                                   error:nil];
+        savedUUID = result;
+        return ;
+    });
+    
+    return savedUUID;
+    
+#else
+    CFUUIDRef puuid = CFUUIDCreate(nil);
+    CFStringRef uuidString = CFUUIDCreateString(nil, puuid );
+    NSString * result = (NSString *)CFBridgingRelease(CFStringCreateCopy(NULL, uuidString));
+    CFRelease(puuid);
+    CFRelease(uuidString);
+    
+    return result;
+#endif
+}
+
 
 /**
  *  系统提供的替代udid的唯一识别字符串，但是在用户把应用开发商所有的应用都删除之后，再重新下载，会生成一个新的值
@@ -432,6 +497,7 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             case HDeviceLocalizedModel_iPhone3G:
             case HDeviceLocalizedModel_iPhone3GS:
             case HDeviceLocalizedModel_iPhone4:
+            case HDeviceLocalizedModel_iPhone4S:
             case HDeviceLocalizedModel_iPad1:
             case HDeviceLocalizedModel_iPad2:
             case HDeviceLocalizedModel_iPadMini1:
@@ -439,34 +505,38 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             case HDeviceLocalizedModel_AppleTV2:
             case HDeviceLocalizedModel_AppleTV3:
             case HDeviceLocalizedModel_Simulator:
-                return;
-
-            case HDeviceLocalizedModel_iPhone4S:
-            {
-                level = HDeviceLevel_Low;
-                return;
-            }
-
             case HDeviceLocalizedModel_iPhone5:
             case HDeviceLocalizedModel_iPhone5C:
+                return;
+
+            case HDeviceLocalizedModel_iPhone5S:
+            case HDeviceLocalizedModel_iPhone6:
+            case HDeviceLocalizedModel_iPhone6P:
             case HDeviceLocalizedModel_iPad3:
             case HDeviceLocalizedModel_iPad4:
             case HDeviceLocalizedModel_iPadAir:
             case HDeviceLocalizedModel_iPadMini2:
             case HDeviceLocalizedModel_iPadMini3:
             {
-                level = HDeviceLevel_Medium;
-                return ;
+                level = HDeviceLevel_Low;
+                return;
             }
 
-            case HDeviceLocalizedModel_iPhone5S:
-            case HDeviceLocalizedModel_iPhone6:
-            case HDeviceLocalizedModel_iPhone6P:
             case HDeviceLocalizedModel_iPhone6S:
             case HDeviceLocalizedModel_iPhone6SP:
             case HDeviceLocalizedModel_iPadAir2:
             case HDeviceLocalizedModel_iPodTouch6:
             case HDeviceLocalizedModel_iPhoneSE:
+            case HDeviceLocalizedModel_iPhone7:
+            case HDeviceLocalizedModel_iPhone7P:
+            {
+                level = HDeviceLevel_Medium;
+                return ;
+            }
+            
+            case HDeviceLocalizedModel_iPhone8:
+            case HDeviceLocalizedModel_iPhone8P:
+            case HDeviceLocalizedModel_iPhoneX:
             case HDeviceLocalizedModel_Unknown://未来可能出现的设备
             {
                 level = HDeviceLevel_High;
@@ -655,6 +725,31 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
             localizedModelName = @"iPhoneSE";
             break;
         }
+        case HDeviceLocalizedModel_iPhone7:
+        {
+            localizedModelName = @"iPhone7";
+            break;
+        }
+        case HDeviceLocalizedModel_iPhone7P:
+        {
+            localizedModelName = @"iPhone7 Plus";
+            break;
+        }
+        case HDeviceLocalizedModel_iPhone8:
+        {
+            localizedModelName = @"iPhone8";
+            break;
+        }
+        case HDeviceLocalizedModel_iPhone8P:
+        {
+             localizedModelName = @"iPhone8P";
+            break;
+        }
+        case HDeviceLocalizedModel_iPhoneX:
+        {
+            localizedModelName = @"iPhoneX";
+            break;
+        }
         case HDeviceLocalizedModel_iPad1:
         {
             localizedModelName = @"iPad";
@@ -698,6 +793,31 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
         case HDeviceLocalizedModel_iPadMini3:
         {
             localizedModelName = @"iPad Mini3";
+            break;
+        }
+        case HDeviceLocalizedModel_iPadMini4:
+        {
+            localizedModelName = @"iPad Mini4";
+            break;
+        }
+        case HDeviceLocalizedModel_iPadPro_10:
+        {
+            localizedModelName = @"iPad pro(9.7)";
+            break;
+        }
+        case HDeviceLocalizedModel_iPadPro_13:
+        {
+            localizedModelName = @"iPad pro(12.9)";
+            break;
+        }
+        case HDeviceLocalizedModel_iPadPro2_10:
+        {
+            localizedModelName = @"iPad pro(10.5)";
+            break;
+        }
+        case HDeviceLocalizedModel_iPadPro2_13:
+        {
+            localizedModelName = @"iPad pro(12.9,2nd gen)";
             break;
         }
         case HDeviceLocalizedModel_iPodTouch1:
@@ -800,9 +920,19 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
                   @"iPhone6,2" : @(HDeviceLocalizedModel_iPhone5S),   //  iPhone 5s (A1457/A1518/A1530)
                   @"iPhone7,1" : @(HDeviceLocalizedModel_iPhone6P),   //  iPhone 6 Plus
                   @"iPhone7,2" : @(HDeviceLocalizedModel_iPhone6),    //  iPhone 6
-                  @"iPhone8,1" : @(HDeviceLocalizedModel_iPhone6S),    //  iPhone 6S
-                  @"iPhone8,2" : @(HDeviceLocalizedModel_iPhone6SP),    //  iPhone 6S Plus
+                  @"iPhone8,1" : @(HDeviceLocalizedModel_iPhone6S),   //  iPhone 6S
+                  @"iPhone8,2" : @(HDeviceLocalizedModel_iPhone6SP),  //  iPhone 6S Plus
                   @"iPhone8,4" : @(HDeviceLocalizedModel_iPhoneSE),
+                  @"iPhone9,1" : @(HDeviceLocalizedModel_iPhone7),
+                  @"iPhone9,3" : @(HDeviceLocalizedModel_iPhone7),
+                  @"iPhone9,2" : @(HDeviceLocalizedModel_iPhone7P),
+                  @"iPhone9,4" : @(HDeviceLocalizedModel_iPhone7P),
+                  @"iPhone10,1": @(HDeviceLocalizedModel_iPhone8),
+                  @"iPhone10,4": @(HDeviceLocalizedModel_iPhone8),
+                  @"iPhone10,2": @(HDeviceLocalizedModel_iPhone8P),
+                  @"iPhone10,5": @(HDeviceLocalizedModel_iPhone8P),
+                  @"iPhone10,3": @(HDeviceLocalizedModel_iPhoneX),
+                  @"iPhone10,6": @(HDeviceLocalizedModel_iPhoneX),
                   
                   @"iPad1,1" : @(HDeviceLocalizedModel_iPad1),      //  iPad
                   @"iPad2,1" : @(HDeviceLocalizedModel_iPad2),      //  iPad 2 (Wi-Fi)
@@ -828,6 +958,19 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
                   @"iPad4,9" : @(HDeviceLocalizedModel_iPadMini3),  //  iPad mini (3rd gen: A1601)
                   @"iPad5,3" : @(HDeviceLocalizedModel_iPadAir2),   //  iPad Air (2nd gen: 1566)
                   @"iPad5,4" : @(HDeviceLocalizedModel_iPadAir2),   //  iPad Air (2nd gen: 1567)
+                  @"iPad5,1" : @(HDeviceLocalizedModel_iPadMini4),  // iPad mini (4th gen: A1538)
+                  @"iPad5,2" : @(HDeviceLocalizedModel_iPadMini4),  // iPad mini (4th gen: A1550)
+                  @"iPad6,3" : @(HDeviceLocalizedModel_iPadPro_10), //  iPad (3nd gen: A1673)
+                  @"iPad6,4" : @(HDeviceLocalizedModel_iPadPro_10), //  iPad (3nd gen: A1674/A1675)
+                  @"iPad6,7" : @(HDeviceLocalizedModel_iPadPro_13), //  iPad pro (3nd gen: A1584)
+                  @"iPad6,8" : @(HDeviceLocalizedModel_iPadPro_13), //  iPad pro (3nd gen: A1652)
+                  @"iPad6,11": @(HDeviceLocalizedModel_iPad5),// iPad 9.7-Inch 5th Gen (Wi-Fi Only)
+                  @"iPad6,12": @(HDeviceLocalizedModel_iPad5),//iPad 9.7-Inch 5th Gen (Wi-Fi/Cellular)
+                  @"iPad7,1" : @(HDeviceLocalizedModel_iPadPro2_13), //iPad Pro (12.9-inch, 2nd generation)
+                  @"iPad7,2" : @(HDeviceLocalizedModel_iPadPro2_13), //iPad Pro (12.9-inch, 2nd generation)
+                  @"iPad7,3" : @(HDeviceLocalizedModel_iPadPro2_10), //iPad Pro (10.5-inch)
+                  @"iPad7,4" : @(HDeviceLocalizedModel_iPadPro2_10), //iPad Pro (10.5-inch)
+                  
 
                   @"iPod1,1" : @(HDeviceLocalizedModel_iPodTouch1), //  iPod touch
                   @"iPod2,1" : @(HDeviceLocalizedModel_iPodTouch2), //  iPod touch (2nd gen)
@@ -848,6 +991,16 @@ static NSString *const kIDFAKeyForKeyChain = @"kIDFAKeyForKeyChain";
                   };
     });
     return inner;
+}
+
+
+#pragma mark 返回手机的状态栏高度
+-(CGFloat)navViewHeight
+{
+    if ([[UIApplication sharedApplication] statusBarOrientation] ==  UIInterfaceOrientationLandscapeLeft || [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight) {
+        return 64;
+    }
+    return _navViewHeight;
 }
 
 @end
